@@ -47,8 +47,10 @@ app.get("/sobre", (req, res) => {
   ));
 });
 
-app.get("/api/cartas", (req, res) => {
+app.get("/api/cartas", (req, res) => { 
+  
   res.json(cards)
+
 });
 
 app.get("/cartas", (req, res) => {
