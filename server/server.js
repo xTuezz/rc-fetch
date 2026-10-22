@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
+
+
 const cards = [
   { name: "Dragão de Cobalto", type: "Criatura", attack: 7, defense: 5 },
   { name: "Guardiã das Marés", type: "Criatura", attack: 4, defense: 8 },
@@ -43,6 +45,10 @@ app.get("/sobre", (req, res) => {
     "Sobre",
     `<p>Feito por <b>&lt;nome do aluno&gt;</b>, turma &lt;turma&gt;.</p>`
   ));
+});
+
+app.get("/api/cartas", (req, res) => {
+  res.json(cards)
 });
 
 app.get("/cartas", (req, res) => {
