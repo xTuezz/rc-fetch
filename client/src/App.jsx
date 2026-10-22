@@ -1,27 +1,37 @@
 import { useState, useEffect } from "react";
 import Card from "./Card.jsx";
 
-const cards = []
+const APIURL = "http://localhost:3000";
 
 function App() {
   const [filter, setFilter] = useState("Todas");
   const [search, setSearch] = useState("");
+  const [Loading, setLoading] = useState(true)
   const [randomCard, setRandomCard] = useState(null);
   const [sorted, setSorted] = useState(false);
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/cartas")
-    .then((res) => res.json())
-    .then((data) => setCards(data));
-  }, [filter, randomCard, search, sorted]);
+    fetch(`${APIURL}/api/cartas`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${Response.status}`)
+      } 
+      return response.json();
+    })
+    .then((data) => (
+      setCards(data)
+    ))
+    .finally(() => (
+      setLoading(false)
+    ));
+  }, []);
 
-  let visible = cards
-    .filter((card) => filter === "Todas" || card.type === filter)
-    .filter((card) => card.name.toLowerCase().includes(search.toLowerCase()));
-
-  if (sorted) {
-    visible = [...visible].sort((a, b) => b.attack - a.attack);
-  }
+const visible = cards.filter(
+  (card) =>
+    (filter === "Todas" || filter === "todas" || card.type === filter) &&
+    card.name.toLowerCase().includes(search.toLowerCase())
+);
 
   function pickRandom() {
     setRandomCard(cards[Math.floor(Math.random() * cards.length)]);

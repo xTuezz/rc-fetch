@@ -48,8 +48,8 @@ app.get("/sobre", (req, res) => {
 });
 
 app.get("/api/cartas", (req, res) => { 
-  
   res.json(cards)
+  res.set("Access-Control-Allow-Origin","http://localhost:5173")
 
 });
 
