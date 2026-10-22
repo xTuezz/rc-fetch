@@ -2,8 +2,10 @@ const express = require("express");
 
 const app = express();
 const PORT = 3000;
+const cors = require("cors");
 
-
+app.use(cors());
+app.use(express.json());
 
 const cards = [
   { name: "Dragão de Cobalto", type: "Criatura", attack: 7, defense: 5 },
@@ -49,8 +51,6 @@ app.get("/sobre", (req, res) => {
 
 app.get("/api/cartas", (req, res) => { 
   res.json(cards)
-  res.set("Access-Control-Allow-Origin","http://localhost:5173")
-
 });
 
 app.get("/cartas", (req, res) => {
@@ -81,11 +81,9 @@ app.get("/agora", (req, res) => {
 });
 
 app.use((req, res) => {
-  res.status(404).send(page(
-    "404 — não encontrado",
-    `<p>Não existe nada em <code>${req.url}</code>.</p>
-     <p><a href="/">Voltar ao início</a></p>`
-  ));
+    res.status(404).json({
+        error: "Not Found"
+    });
 });
 
 app.listen(PORT, () => {

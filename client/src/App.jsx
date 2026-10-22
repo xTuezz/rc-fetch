@@ -11,26 +11,28 @@ function App() {
   const [randomCard, setRandomCard] = useState(null);
   const [sorted, setSorted] = useState(false);
   const [cards, setCards] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`${APIURL}/api/cartas`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
+  fetch(`${APIURL}/api/cartas`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
 
-        return response.json();
-      })
-      .then((data) => {
-        setCards(data);
-      })
-      .catch((error) => {
-        console.error("Erro ao carregar as cartas:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+      return response.json();
+    })
+    .then((data) => {
+      setCards(data);
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar as cartas:", error);
+      setError(error.message);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+}, []);
 
   const visible = cards
     .filter(
@@ -49,7 +51,11 @@ function App() {
   }
 
   if (Loading) {
-    return <p>A carregar…</p>;
+    return <p>A carregar cartas...</p>;
+  }
+
+  if (error) {
+    return <p>Erro ao carregar as cartas: {error}</p>;
   }
 
   return (
